@@ -314,10 +314,11 @@ class OpenIDResponder(utils.RouteResponder):
         
         #openid_session = self.storage.retrieve(req.session.id)
         openid_session = req.session.get('openid_session', None)
-        del req.session['openid_session']
         if not openid_session:
             return self._error_redirect(1, end_point)
-        
+
+        # Delete the session attribute only if it was configured
+        del req.session['openid_session']
         # Setup the consumer and parse the information coming back
         oidconsumer = consumer.Consumer(openid_session, self.openid_store)
         return_to = self._get_return_to(req)
